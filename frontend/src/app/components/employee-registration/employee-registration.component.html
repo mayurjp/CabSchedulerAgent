@@ -16,6 +16,17 @@
     <input id="department" type="text" [(ngModel)]="employee.department" placeholder="Enter department" />
   </div>
 
+  <div class="form-row">
+    <div class="form-group">
+      <label for="pickupLat">Pickup Latitude</label>
+      <input id="pickupLat" type="number" step="any" [(ngModel)]="employee.pickupLat" placeholder="e.g. 12.9716" />
+    </div>
+    <div class="form-group">
+      <label for="pickupLng">Pickup Longitude</label>
+      <input id="pickupLng" type="number" step="any" [(ngModel)]="employee.pickupLng" placeholder="e.g. 77.5946" />
+    </div>
+  </div>
+
   <button (click)="register()">Register Employee</button>
 
   <p class="message" *ngIf="message">{{ message }}</p>
@@ -30,6 +41,8 @@
         <th>Name</th>
         <th>Email</th>
         <th>Department</th>
+        <th>Lat</th>
+        <th>Lng</th>
       </tr>
     </thead>
     <tbody>
@@ -38,6 +51,8 @@
         <td>{{ emp.name }}</td>
         <td>{{ emp.email }}</td>
         <td>{{ emp.department }}</td>
+        <td>{{ emp.pickupLat }}</td>
+        <td>{{ emp.pickupLng }}</td>
       </tr>
     </tbody>
   </table>

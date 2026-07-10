@@ -5,6 +5,9 @@ import { Employee } from '../models/employee';
 import { Cab } from '../models/cab';
 import { Driver } from '../models/driver';
 import { CabRequest } from '../models/cab-request';
+import { Route } from '../models/route';
+import { Assignment } from '../models/assignment';
+import { SupervisorDashboard } from '../models/dashboard';
 
 @Injectable({
   providedIn: 'root'
@@ -46,5 +49,25 @@ export class ApiService {
     return this.http.put<void>(`${this.baseUrl}/cabrequests/${id}/status`, JSON.stringify(status), {
       headers: { 'Content-Type': 'application/json' }
     });
+  }
+
+  runMorningCycle(): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}/scheduler/run-morning`, {});
+  }
+
+  runEveningCycle(): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}/scheduler/run-evening`, {});
+  }
+
+  getRoutes(): Observable<Route[]> {
+    return this.http.get<Route[]>(`${this.baseUrl}/routes`);
+  }
+
+  getAssignments(): Observable<Assignment[]> {
+    return this.http.get<Assignment[]>(`${this.baseUrl}/assignments`);
+  }
+
+  getSupervisorDashboard(): Observable<SupervisorDashboard> {
+    return this.http.get<SupervisorDashboard>(`${this.baseUrl}/supervisor/dashboard`);
   }
 }

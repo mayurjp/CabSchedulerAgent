@@ -13,7 +13,7 @@ import { Employee } from '../../models/employee';
 })
 export class EmployeeRegistrationComponent implements OnInit {
   employees: Employee[] = [];
-  employee: Employee = { id: 0, name: '', email: '', department: '' };
+  employee: Employee = { id: 0, name: '', email: '', department: '', pickupLat: 0, pickupLng: 0 };
   message = '';
 
   constructor(private apiService: ApiService) {}
@@ -33,7 +33,7 @@ export class EmployeeRegistrationComponent implements OnInit {
     this.apiService.createEmployee(this.employee).subscribe({
       next: () => {
         this.message = 'Employee registered successfully!';
-        this.employee = { id: 0, name: '', email: '', department: '' };
+        this.employee = { id: 0, name: '', email: '', department: '', pickupLat: 0, pickupLng: 0 };
         this.loadEmployees();
       },
       error: () => this.message = 'Failed to register employee.'

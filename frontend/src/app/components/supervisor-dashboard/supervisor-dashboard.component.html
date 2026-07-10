@@ -1,0 +1,66 @@
+<div class="dashboard">
+  <h2>Supervisor Dashboard</h2>
+
+  <div class="scheduler-actions">
+    <button (click)="runMorning()" [disabled]="loading">Run Morning Pickup Cycle</button>
+    <button (click)="runEvening()" [disabled]="loading">Run Evening Drop Cycle</button>
+  </div>
+
+  <p class="message" *ngIf="message">{{ message }}</p>
+
+  <div class="summary-cards" *ngIf="dashboard">
+    <div class="card">
+      <span class="card-value">{{ dashboard.summary.totalEmployees }}</span>
+      <span class="card-label">Employees</span>
+    </div>
+    <div class="card">
+      <span class="card-value">{{ dashboard.summary.totalCabs }}</span>
+      <span class="card-label">Cabs</span>
+    </div>
+    <div class="card">
+      <span class="card-value">{{ dashboard.summary.totalDrivers }}</span>
+      <span class="card-label">Drivers</span>
+    </div>
+    <div class="card">
+      <span class="card-value">{{ dashboard.summary.pendingRequests }}</span>
+      <span class="card-label">Pending</span>
+    </div>
+    <div class="card">
+      <span class="card-value">{{ dashboard.summary.activeRoutes }}</span>
+      <span class="card-label">Active Routes</span>
+    </div>
+    <div class="card">
+      <span class="card-value">{{ dashboard.summary.todayAssignments }}</span>
+      <span class="card-label">Assignments</span>
+    </div>
+  </div>
+
+  <hr />
+
+  <h3>Recent Routes</h3>
+  <table *ngIf="dashboard && dashboard.recentRoutes.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Cycle</th>
+        <th>Cab</th>
+        <th>Driver</th>
+        <th>Employees</th>
+        <th>Created</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let route of dashboard.recentRoutes">
+        <td>{{ route.id }}</td>
+        <td>{{ route.name }}</td>
+        <td>{{ route.cycle }}</td>
+        <td>{{ route.cabPlate }}</td>
+        <td>{{ route.driverName }}</td>
+        <td>{{ route.employeeCount }}</td>
+        <td>{{ route.createdAt | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="dashboard && dashboard.recentRoutes.length === 0">No routes created yet.</p>
+</div>

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using CabScheduler.Api.Data;
 using CabScheduler.Api.Agents;
+using CabScheduler.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services.AddDbContext<CabSchedulerDbContext>(options =>
 
 builder.Services.AddScoped<EmployeeAgent>();
 builder.Services.AddScoped<SupervisorAgent>();
+builder.Services.AddScoped<SchedulingEngine>();
+builder.Services.AddScoped<SchedulerAgent>();
 
 builder.Services.AddCors(options =>
 {

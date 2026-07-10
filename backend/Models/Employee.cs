@@ -17,4 +17,8 @@ public class Employee
 
     [MaxLength(100)]
     public string Department { get; set; } = string.Empty;
+
+    public double PickupLat { get; set; }
+
+    public double PickupLng { get; set; }
 }
