@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.AI;
 using CabScheduler.Api.Agents;
 
 namespace CabScheduler.Api.Controllers;
@@ -19,23 +20,32 @@ public class SchedulerController : ControllerBase
     [HttpPost("run-morning")]
     public async Task<IActionResult> RunMorning()
     {
-        var result = await _schedulerAgent.OrchestrateMorningCycleAsync();
-        return Ok(new { message = result });
+        var session = await _schedulerAgent.CreateSessionAsync();
+        var response = await _schedulerAgent.RunAsync(
+            new List<ChatMessage> { new(ChatRole.User, "run morning") }, session);
+        var text = response.Messages.LastOrDefault()?.Text ?? "Scheduler completed.";
+        return Ok(new { message = text });
     }
 
     [HttpPost("run-evening")]
     public async Task<IActionResult> RunEvening()
     {
-        var result = await _schedulerAgent.OrchestrateEveningCycleAsync();
-        return Ok(new { message = result });
+        var session = await _schedulerAgent.CreateSessionAsync();
+        var response = await _schedulerAgent.RunAsync(
+            new List<ChatMessage> { new(ChatRole.User, "run evening") }, session);
+        var text = response.Messages.LastOrDefault()?.Text ?? "Scheduler completed.";
+        return Ok(new { message = text });
     }
 
     [HttpPost("cancel/{requestId}")]
     public async Task<IActionResult> CancelAndReroute(int requestId, [FromBody] CancelRequest? body)
     {
         var reason = body?.Reason ?? "Cancelled by supervisor";
-        var result = await _adaptiveSchedulerAgent.CancelAndRerouteAsync(requestId, reason);
-        return Ok(new { message = result });
+        var session = await _adaptiveSchedulerAgent.CreateSessionAsync();
+        var response = await _adaptiveSchedulerAgent.RunAsync(
+            new List<ChatMessage> { new(ChatRole.User, $"cancel request {requestId} reason {reason}") }, session);
+        var text = response.Messages.LastOrDefault()?.Text ?? "Cancellation processed.";
+        return Ok(new { message = text });
     }
 }
 

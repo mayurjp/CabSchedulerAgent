@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.AI;
 using CabScheduler.Api.Agents;
 using CabScheduler.Api.Services;
 
@@ -27,15 +28,26 @@ public class NotificationsController : ControllerBase
     [HttpGet("fleet-summary")]
     public async Task<IActionResult> GetFleetSummary()
     {
-        var summary = await _supervisorAgent.GenerateFleetSummaryAsync();
-        return Ok(new { summary });
+        var session = await _supervisorAgent.CreateSessionAsync();
+        var messages = new List<ChatMessage> { new(ChatRole.User, "fleet summary") };
+        var response = await _supervisorAgent.RunAsync(messages, session);
+        var text = response.Messages.LastOrDefault()?.Text ?? "No summary available.";
+
+        return Ok(new { summary = text });
     }
 
     [HttpPost("delay/{routeId}")]
     public async Task<IActionResult> NotifyDelay(int routeId, [FromBody] DelayRequest request)
     {
-        var result = await _supervisorAgent.NotifyDelayAsync(routeId, request.Reason);
-        return Ok(new { message = result });
+        var session = await _supervisorAgent.CreateSessionAsync();
+        var messages = new List<ChatMessage>
+        {
+            new(ChatRole.User, $"delay route {routeId} due to {request.Reason}")
+        };
+        var response = await _supervisorAgent.RunAsync(messages, session);
+        var text = response.Messages.LastOrDefault()?.Text ?? "Notification failed.";
+
+        return Ok(new { message = text });
     }
 
     [HttpGet]

@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.AI;
+using Microsoft.Agents.AI;
 using CabScheduler.Api.Agents;
 
 namespace CabScheduler.Api.Controllers;
@@ -17,7 +19,18 @@ public class ChatController : ControllerBase
     [HttpPost("employee/message")]
     public async Task<IActionResult> SendMessage([FromBody] ChatRequest request)
     {
-        var reply = await _employeeAgent.ProcessChatMessageAsync(request.EmployeeId, request.Message);
+        var session = await _employeeAgent.CreateSessionAsync();
+        var messages = new List<ChatMessage>
+        {
+            new(ChatRole.User, $"employee {request.EmployeeId} says: {request.Message}")
+        };
+
+        var response = await _employeeAgent.RunAsync(messages, session);
+
+        var reply = response.Messages.Any()
+            ? response.Messages.Last().Text ?? "I didn't understand that."
+            : "I didn't understand that.";
+
         return Ok(new { reply });
     }
 }
