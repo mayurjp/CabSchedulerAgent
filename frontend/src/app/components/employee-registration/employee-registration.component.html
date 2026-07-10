@@ -1,0 +1,45 @@
+<div class="container">
+  <h2>Employee Registration</h2>
+
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input id="name" type="text" [(ngModel)]="employee.name" placeholder="Enter name" />
+  </div>
+
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input id="email" type="email" [(ngModel)]="employee.email" placeholder="Enter email" />
+  </div>
+
+  <div class="form-group">
+    <label for="department">Department</label>
+    <input id="department" type="text" [(ngModel)]="employee.department" placeholder="Enter department" />
+  </div>
+
+  <button (click)="register()">Register Employee</button>
+
+  <p class="message" *ngIf="message">{{ message }}</p>
+
+  <hr />
+
+  <h3>Registered Employees</h3>
+  <table *ngIf="employees.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Department</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let emp of employees">
+        <td>{{ emp.id }}</td>
+        <td>{{ emp.name }}</td>
+        <td>{{ emp.email }}</td>
+        <td>{{ emp.department }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="employees.length === 0">No employees registered yet.</p>
+</div>

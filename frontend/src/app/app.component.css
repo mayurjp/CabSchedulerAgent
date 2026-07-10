@@ -1,0 +1,18 @@
+nav {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #1976d2;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+nav a:hover {
+  background: rgba(255, 255, 255, 0.15);
+}

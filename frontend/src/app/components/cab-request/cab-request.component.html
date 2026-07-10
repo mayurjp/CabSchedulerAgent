@@ -1,0 +1,50 @@
+<div class="container">
+  <h2>Request a Cab</h2>
+
+  <div class="form-group">
+    <label for="employeeId">Employee</label>
+    <select id="employeeId" [(ngModel)]="cabRequest.employeeId">
+      <option [ngValue]="0" disabled>Select an employee</option>
+      <option *ngFor="let emp of employees" [ngValue]="emp.id">{{ emp.name }} ({{ emp.email }})</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="pickup">Pickup Location</label>
+    <input id="pickup" type="text" [(ngModel)]="cabRequest.pickupLocation" placeholder="Enter pickup location" />
+  </div>
+
+  <div class="form-group">
+    <label for="dropoff">Drop-off Location</label>
+    <input id="dropoff" type="text" [(ngModel)]="cabRequest.dropoffLocation" placeholder="Enter drop-off location" />
+  </div>
+
+  <button (click)="submitRequest()">Submit Request</button>
+
+  <p class="message" *ngIf="message">{{ message }}</p>
+
+  <hr />
+
+  <h3>Existing Cab Requests</h3>
+  <table *ngIf="requests.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Employee</th>
+        <th>Pickup</th>
+        <th>Drop-off</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let req of requests">
+        <td>{{ req.id }}</td>
+        <td>{{ req.employeeId }}</td>
+        <td>{{ req.pickupLocation }}</td>
+        <td>{{ req.dropoffLocation }}</td>
+        <td>{{ req.status }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="requests.length === 0">No cab requests yet.</p>
+</div>

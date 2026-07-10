@@ -1,0 +1,59 @@
+# Node / Angular
+node_modules/
+dist/
+.temp/
+.cache/
+*.log
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.vs/
+*.DotSettings.user
+*.csproj.user
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# Environment
+.env
+.env.local
+.env.*.local
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json
+
+# Database
+*.mdf
+*.ldf
+*.bak
+Migrations/
+!backend/Migrations/
+
+# Build
+/publish/
+/build/
+
+# Test
+TestResults/
+*.trx
+coverage/
+
+# Package
+*.nupkg
+package-lock.json
+
+# Temp
+*.tmp
+*.temp

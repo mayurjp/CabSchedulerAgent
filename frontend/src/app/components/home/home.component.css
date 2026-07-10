@@ -1,0 +1,50 @@
+.home {
+  max-width: 700px;
+  margin: 3rem auto;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #1976d2;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.actions {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.card {
+  display: block;
+  width: 250px;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #333;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #1976d2;
+}
+
+.card h3 {
+  margin: 0 0 0.5rem;
+  color: #1976d2;
+}
+
+.card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
