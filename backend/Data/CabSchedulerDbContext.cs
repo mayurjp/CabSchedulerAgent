@@ -17,6 +17,7 @@ public class CabSchedulerDbContext : DbContext
     public DbSet<CabRequest> CabRequests => Set<CabRequest>();
     public DbSet<RouteEntity> Routes => Set<RouteEntity>();
     public DbSet<Assignment> Assignments => Set<Assignment>();
+    public DbSet<Notification> Notifications => Set<Notification>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

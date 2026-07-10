@@ -1,8 +1,8 @@
-# Cab Scheduler v0.2
+# Cab Scheduler v0.3
 
 ## Overview
 
-This version introduces the Scheduling Engine. Employees are grouped by pickup proximity, and cabs are assigned automatically with respect to capacity. The SchedulerAgent implemented using Microsoft Agent Framework orchestrates assignments. A supervisor dashboard has been added to the Angular frontend.
+This version integrates Agentic AI capabilities using Microsoft Agent Framework. Employees and supervisors interact with AI agents for scheduling, updates, and notifications. Adaptive scheduling handles cancellations and delays. Event-driven notifications flow through Kafka/RabbitMQ.
 
 ## Features
 
@@ -12,11 +12,16 @@ This version introduces the Scheduling Engine. Employees are grouped by pickup p
 | REST API (Employees, Cabs, Drivers, CabRequests) | v0.1   |
 | SQL Express persistence via EF Core | v0.1   |
 | Agent Framework Stubs (EmployeeAgent, SupervisorAgent) | v0.1   |
-| **Automated Scheduling Engine**     | **v0.2** |
-| **Morning pickup & evening drop cycle** | **v0.2** |
-| **Route grouping by employee location proximity** | **v0.2** |
-| **Angular Supervisor Dashboard**    | **v0.2** |
-| **SchedulerAgent (orchestrates assignments)** | **v0.2** |
+| Automated Scheduling Engine     | v0.2   |
+| Morning pickup & evening drop cycle | v0.2   |
+| Route grouping by employee location proximity | v0.2   |
+| Angular Supervisor Dashboard    | v0.2   |
+| SchedulerAgent (orchestrates assignments) | v0.2   |
+| **Angular Chat UI for employee requests/cancellations** | **v0.3** |
+| **Supervisor notification agent with fleet summaries** | **v0.3** |
+| **AdaptiveSchedulerAgent for dynamic re-routing** | **v0.3** |
+| **Kafka/RabbitMQ event-driven notifications** | **v0.3** |
+| **Full agent orchestration with Microsoft Agent Framework** | **v0.3** |
 
 ## Tech Stack
 
@@ -27,6 +32,7 @@ This version introduces the Scheduling Engine. Employees are grouped by pickup p
 | SQL Express                | Latest  |
 | Entity Framework Core      | 10      |
 | Microsoft Agent Framework  | Latest  |
+| Kafka / RabbitMQ           | Latest  |
 
 ## Project Structure
 
@@ -44,8 +50,9 @@ CabSchedulerAgent/
 │   ├── Controllers/
 │   ├── Models/
 │   ├── Data/                  # DbContext & migrations
-│   ├── Agents/                # Agent stubs & SchedulerAgent
-│   └── Services/              # Scheduling engine & route grouping
+│   ├── Agents/                # Agent stubs, SchedulerAgent, AdaptiveSchedulerAgent
+│   ├── Services/              # Scheduling engine, route grouping, notifications
+│   ├── EventBus/              # Kafka/RabbitMQ producers & consumers
 ├── database/                  # SQL Express schema & migrations
 ├── docs/                      # Additional documentation
 └── README.md
@@ -117,13 +124,18 @@ Ensure SQL Express is running. Update the connection string in `backend/appsetti
 | POST   | `/api/scheduler/run-evening`   | **v0.2** Run evening drop cycle     |
 | GET    | `/api/routes`               | **v0.2** List all routes             |
 | GET    | `/api/assignments`          | **v0.2** List all assignments        |
-| GET    | `/api/supervisor/dashboard` | **v0.2** Supervisor dashboard data   |
+| GET    | `/api/supervisor/dashboard` | Supervisor dashboard data        |
+| POST   | `/api/chat/employee/message` | **v0.3** Employee chat agent message  |
+| POST   | `/api/notifications/send`    | **v0.3** Send notification via agent  |
+| GET    | `/api/notifications/fleet-summary` | **v0.3** Fleet summary for supervisor |
+| POST   | `/api/scheduler/cancel/{requestId}` | **v0.3** Cancel & re-route request |
 
 ## Agents
 
-- **EmployeeAgent** — Handles employee-facing interactions (registration, cab requests).
-- **SupervisorAgent** — Coordinates scheduling decisions and driver assignments.
+- **EmployeeAgent** (v0.1/v0.3) — Handles employee-facing interactions: registration, cab requests, cancellations. In v0.3, powers the Angular chat UI.
+- **SupervisorAgent** (v0.1/v0.3) — Coordinates scheduling decisions, driver assignments, and fleet summaries. In v0.3, sends event-driven notifications via Kafka/RabbitMQ.
 - **SchedulerAgent** (v0.2) — Orchestrates the automated scheduling engine: groups employees by pickup proximity, assigns cabs respecting capacity, and manages morning/evening cycles.
+- **AdaptiveSchedulerAgent** (v0.3) — Handles dynamic re-routing for cancellations and delays. Listens to events from the message broker and adjusts routes in real time.
 
 Agent implementations are defined in `backend/Agents/`.
 
@@ -178,11 +190,22 @@ Agent implementations are defined in `backend/Agents/`.
 | EmployeeId    | int (FK) |
 | CabRequestId  | int (FK) |
 
+### Notifications (v0.3)
+
+| Column      | Type     |
+| ----------- | -------- |
+| Id          | int (PK) |
+| Recipient   | string   |
+| Channel     | string   |
+| Message     | string   |
+| SentAt      | DateTime |
+| Status      | string   |
+
 ## Next Steps
 
-- [ ] Add AI communication agents for employee notifications.
-- [ ] Implement real-time notifications via SignalR.
-- [ ] Add authentication and role-based access control.
+- [ ] Add traffic data integration for route optimization.
+- [ ] Expand to multiple office destinations.
+- [ ] Implement authentication and role-based access control.
 
 ## License
 

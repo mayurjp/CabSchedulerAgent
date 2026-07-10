@@ -70,4 +70,20 @@ export class ApiService {
   getSupervisorDashboard(): Observable<SupervisorDashboard> {
     return this.http.get<SupervisorDashboard>(`${this.baseUrl}/supervisor/dashboard`);
   }
+
+  sendChatMessage(employeeId: number, message: string): Observable<{ reply: string }> {
+    return this.http.post<{ reply: string }>(`${this.baseUrl}/chat/employee/message`, { employeeId, message });
+  }
+
+  cancelRequest(requestId: number, reason: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}/scheduler/cancel/${requestId}`, { reason });
+  }
+
+  sendNotification(recipient: string, channel: string, message: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/notifications/send`, { recipient, channel, message });
+  }
+
+  getFleetSummary(): Observable<{ summary: string }> {
+    return this.http.get<{ summary: string }>(`${this.baseUrl}/notifications/fleet-summary`);
+  }
 }

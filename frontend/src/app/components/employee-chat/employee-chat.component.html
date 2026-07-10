@@ -1,0 +1,42 @@
+<div class="chat-container">
+  <h2>Employee Chat Agent</h2>
+  <p class="subtitle">Ask about your cab request status, cancel a ride, or book a pickup.</p>
+
+  <div class="form-group">
+    <label for="employeeSelect">Select Employee</label>
+    <select id="employeeSelect" [(ngModel)]="selectedEmployeeId">
+      <option [ngValue]="0" disabled>Choose an employee</option>
+      <option *ngFor="let emp of employees" [ngValue]="emp.id">{{ emp.name }} ({{ emp.email }})</option>
+    </select>
+  </div>
+
+  <div class="chat-window">
+    <div class="messages">
+      <div
+        *ngFor="let msg of messages"
+        class="message"
+        [ngClass]="msg.sender === 'user' ? 'message-user' : 'message-agent'"
+      >
+        <strong>{{ msg.sender === 'user' ? 'You' : 'Agent' }}:</strong>
+        <span>{{ msg.text }}</span>
+      </div>
+      <div *ngIf="sending" class="message message-agent">
+        <em>Agent is typing...</em>
+      </div>
+      <p *ngIf="messages.length === 0 && !sending" class="empty">
+        Select an employee and type a message to start. Try: "what is my status?", "cancel my ride", or "book a pickup".
+      </p>
+    </div>
+
+    <div class="input-area">
+      <input
+        type="text"
+        [(ngModel)]="userMessage"
+        (keyup.enter)="send()"
+        placeholder="Type a message..."
+        [disabled]="sending || selectedEmployeeId === 0"
+      />
+      <button (click)="send()" [disabled]="sending || selectedEmployeeId === 0">Send</button>
+    </div>
+  </div>
+</div>

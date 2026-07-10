@@ -8,10 +8,12 @@ namespace CabScheduler.Api.Controllers;
 public class SchedulerController : ControllerBase
 {
     private readonly SchedulerAgent _schedulerAgent;
+    private readonly AdaptiveSchedulerAgent _adaptiveSchedulerAgent;
 
-    public SchedulerController(SchedulerAgent schedulerAgent)
+    public SchedulerController(SchedulerAgent schedulerAgent, AdaptiveSchedulerAgent adaptiveSchedulerAgent)
     {
         _schedulerAgent = schedulerAgent;
+        _adaptiveSchedulerAgent = adaptiveSchedulerAgent;
     }
 
     [HttpPost("run-morning")]
@@ -27,4 +29,17 @@ public class SchedulerController : ControllerBase
         var result = await _schedulerAgent.OrchestrateEveningCycleAsync();
         return Ok(new { message = result });
     }
+
+    [HttpPost("cancel/{requestId}")]
+    public async Task<IActionResult> CancelAndReroute(int requestId, [FromBody] CancelRequest? body)
+    {
+        var reason = body?.Reason ?? "Cancelled by supervisor";
+        var result = await _adaptiveSchedulerAgent.CancelAndRerouteAsync(requestId, reason);
+        return Ok(new { message = result });
+    }
+}
+
+public class CancelRequest
+{
+    public string Reason { get; set; } = string.Empty;
 }
